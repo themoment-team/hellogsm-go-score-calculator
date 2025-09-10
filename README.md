@@ -137,9 +137,39 @@ GSM(광주소프트웨어마이스터고) 입학 전형의 내신 성적 계산�
 - 평균 점수 기반 교과/비교과 점수 환산
 - 출결 점수 만점(30점) 자동 부여
 
-## 빌드 방법
+## 빌드
+
+#### Mac/Linux 환경
 ```bash
-cd /Users/snowykte0426/Programming/hellogsm-go-score-calculator
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bootstrap main.go
-zip function.zip bootstrap
+chmod +x build.sh
+./build.sh
 ```
+
+#### Windows 환경
+```cmd
+#Git Bash
+bash build.sh
+
+#PowerShell
+powershell -ExecutionPolicy Bypass -File build.ps1
+```
+
+#### Windows 환경
+```cmd
+# 의존성 정리
+go mod tidy
+
+# Lambda용 바이너리 빌드 (PowerShell)
+$env:CGO_ENABLED=0; $env:GOOS="linux"; $env:GOARCH="amd64"; go build -o bootstrap main.go
+
+# ZIP 패키지 생성 (PowerShell - Compress-Archive 사용)
+Compress-Archive -Path bootstrap -DestinationPath function.zip -Force
+
+# 또는 7-Zip 사용 (설치된 경우)
+7z a function.zip bootstrap
+```
+
+### 빌드 결과
+성공적으로 빌드되면 다음 파일이 생성됩니다:
+- `bootstrap`: AWS Lambda 실행 파일
+- `function.zip`: Lambda 배포용 ZIP 패키지
