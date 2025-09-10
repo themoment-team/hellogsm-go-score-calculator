@@ -1,6 +1,10 @@
 package types
 
-import "math/big"
+import (
+	"fmt"
+	"math"
+	"math/big"
+)
 
 type GraduationType string
 
@@ -43,7 +47,7 @@ type MiddleSchoolAchievementCalcDto struct {
 	VolunteerTime           []int    `json:"volunteerTime"`
 	LiberalSystem           string   `json:"liberalSystem"`
 	FreeSemester            string   `json:"freeSemester"`
-	GedAvgScore             *big.Rat `json:"-"`  // JSON에서 제외, 내부 계산용
+	GedAvgScore             *big.Rat `json:"-"` // JSON에서 제외, 내부 계산용
 }
 
 type GeneralSubjectsSemesterScoreCalcDto struct {
@@ -55,21 +59,43 @@ type GeneralSubjectsSemesterScoreCalcDto struct {
 }
 
 type GeneralSubjectsScoreDetailResDto struct {
-	Score1_2 float64 `json:"score1_2,omitempty"`
-	Score2_1 float64 `json:"score2_1,omitempty"`
-	Score2_2 float64 `json:"score2_2,omitempty"`
-	Score3_1 float64 `json:"score3_1,omitempty"`
-	Score3_2 float64 `json:"score3_2,omitempty"`
+	Score1_2 *ScoreValue `json:"score1_2,omitempty"`
+	Score2_1 *ScoreValue `json:"score2_1,omitempty"`
+	Score2_2 *ScoreValue `json:"score2_2,omitempty"`
+	Score3_1 *ScoreValue `json:"score3_1,omitempty"`
+	Score3_2 *ScoreValue `json:"score3_2,omitempty"`
 }
 
 type CalculatedScoreResDto struct {
-	GeneralSubjectsScore       float64                           `json:"generalSubjectsScore,omitempty"`
+	GeneralSubjectsScore       *ScoreValue                       `json:"generalSubjectsScore,omitempty"`
 	GeneralSubjectsScoreDetail *GeneralSubjectsScoreDetailResDto `json:"generalSubjectsScoreDetail,omitempty"`
-	ArtsPhysicalSubjectsScore  float64                           `json:"artsPhysicalSubjectsScore,omitempty"`
-	TotalSubjectsScore         float64                           `json:"totalSubjectsScore,omitempty"`
-	AttendanceScore            float64                           `json:"attendanceScore"`
-	VolunteerScore             float64                           `json:"volunteerScore"`
-	TotalScore                 float64                           `json:"totalScore"`
+	ArtsPhysicalSubjectsScore  *ScoreValue                       `json:"artsPhysicalSubjectsScore,omitempty"`
+	TotalSubjectsScore         *ScoreValue                       `json:"totalSubjectsScore,omitempty"`
+	AttendanceScore            *ScoreValue                       `json:"attendanceScore"`
+	VolunteerScore             *ScoreValue                       `json:"volunteerScore"`
+	TotalScore                 *ScoreValue                       `json:"totalScore"`
+}
+
+type ScoreValue struct {
+	Value float64
+}
+
+func (s ScoreValue) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("%.3f", s.Value)), nil
+}
+
+func NewScoreValue(rat *big.Rat) *ScoreValue {
+	if rat == nil {
+		return &ScoreValue{Value: 0.0}
+	}
+
+	multiplier := big.NewRat(1000, 1)
+	temp := new(big.Rat).Mul(rat, multiplier)
+
+	floatVal, _ := temp.Float64()
+	rounded := math.Round(floatVal) // 4자리에서 반올림
+
+	return &ScoreValue{Value: rounded / 1000.0}
 }
 
 type ErrorResponse struct {

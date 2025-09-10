@@ -129,7 +129,7 @@ func CalcGeneralSubjectsScore(achievements []int, maxPoint *big.Rat) *big.Rat {
 	// 1. 점수로 환산된 등급을 모두 더한다.
 	totalSumRat := big.NewRat(int64(totalSum), 1)
 
-	// 2. 더한값 / (과목 수 * 5) (소수점 6째자리에서 반올림)
+	// 2. 더한값 / (과목 수 * 5) 5자리 정밀도로 계산
 	divisor := big.NewRat(int64(len(noZeroAchievements)*5), 1)
 	divideResult := new(big.Rat).Quo(totalSumRat, divisor)
 
@@ -164,7 +164,12 @@ func CalcArtSportsScore(achievements []int) *big.Rat {
 	// 3. 각 등급별 갯수를 더한 값(성취 수)에 5를 곱해 총점을 구한다.
 	maxScore := 5 * achievementCount
 
-	averageOfAchievementScale := big.NewRat(int64(totalScores), int64(maxScore))
+	totalScoresRat := big.NewRat(int64(totalScores), 1)
+	maxScoreRat := big.NewRat(int64(maxScore), 1)
+
+	averageOfAchievementScale := new(big.Rat).Quo(totalScoresRat, maxScoreRat)
+	averageOfAchievementScale = RoundToThreeDecimals(averageOfAchievementScale)
+
 	result := new(big.Rat).Mul(big.NewRat(60, 1), averageOfAchievementScale)
 
 	return RoundToThreeDecimals(result)

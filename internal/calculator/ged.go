@@ -32,10 +32,10 @@ func ExecuteGed(dto types.MiddleSchoolAchievementCalcDto) types.CalculatedScoreR
 	totalScore = RoundToThreeDecimals(totalScore)
 
 	return types.CalculatedScoreResDto{
-		TotalSubjectsScore: RatToFloat64(gedTotalSubjectsScore),
-		AttendanceScore:    RatToFloat64(gedAttendanceScore),
-		VolunteerScore:     RatToFloat64(gedVolunteerScore),
-		TotalScore:         RatToFloat64(totalScore),
+		TotalSubjectsScore: types.NewScoreValue(gedTotalSubjectsScore),
+		AttendanceScore:    types.NewScoreValue(gedAttendanceScore),
+		VolunteerScore:     types.NewScoreValue(gedVolunteerScore),
+		TotalScore:         types.NewScoreValue(totalScore),
 	}
 }
 

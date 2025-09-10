@@ -39,21 +39,21 @@ func Execute(dto types.MiddleSchoolAchievementCalcDto, graduationType types.Grad
 	totalScore := new(big.Rat).Add(totalSubjectsScore, totalNonSubjectsScore)
 	totalScore = RoundToThreeDecimals(totalScore)
 
-	// big.Rat을 float64로 변환
+	// big.Rat을 ScoreValue로 변환
 	generalSubjectsScoreDetail := &types.GeneralSubjectsScoreDetailResDto{
-		Score1_2: RatToFloat64(generalSubjectsSemesterScore.Score1_2),
-		Score2_1: RatToFloat64(generalSubjectsSemesterScore.Score2_1),
-		Score2_2: RatToFloat64(generalSubjectsSemesterScore.Score2_2),
-		Score3_1: RatToFloat64(generalSubjectsSemesterScore.Score3_1),
-		Score3_2: RatToFloat64(generalSubjectsSemesterScore.Score3_2),
+		Score1_2: types.NewScoreValue(generalSubjectsSemesterScore.Score1_2),
+		Score2_1: types.NewScoreValue(generalSubjectsSemesterScore.Score2_1),
+		Score2_2: types.NewScoreValue(generalSubjectsSemesterScore.Score2_2),
+		Score3_1: types.NewScoreValue(generalSubjectsSemesterScore.Score3_1),
+		Score3_2: types.NewScoreValue(generalSubjectsSemesterScore.Score3_2),
 	}
 
 	return types.CalculatedScoreResDto{
-		GeneralSubjectsScore:       RatToFloat64(generalSubjectsScore),
-		ArtsPhysicalSubjectsScore:  RatToFloat64(artsPhysicalSubjectsScore),
-		AttendanceScore:            RatToFloat64(attendanceScore),
-		VolunteerScore:             RatToFloat64(volunteerScore),
-		TotalScore:                 RatToFloat64(totalScore),
+		GeneralSubjectsScore:       types.NewScoreValue(generalSubjectsScore),
+		ArtsPhysicalSubjectsScore:  types.NewScoreValue(artsPhysicalSubjectsScore),
+		AttendanceScore:            types.NewScoreValue(attendanceScore),
+		VolunteerScore:             types.NewScoreValue(volunteerScore),
+		TotalScore:                 types.NewScoreValue(totalScore),
 		GeneralSubjectsScoreDetail: generalSubjectsScoreDetail,
 	}
 }
