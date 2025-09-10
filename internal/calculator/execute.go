@@ -1,8 +1,8 @@
 package calculator
 
 import (
+	"go-hellogsm-score-calculator/internal/types"
 	"math/big"
-	"hellogsm-go-score-calculator/internal/types"
 )
 
 func Execute(dto types.MiddleSchoolAchievementCalcDto, graduationType types.GraduationType) types.CalculatedScoreResDto {
@@ -10,7 +10,7 @@ func Execute(dto types.MiddleSchoolAchievementCalcDto, graduationType types.Grad
 	if graduationType == types.GED {
 		return ExecuteGed(dto)
 	}
-	
+
 	generalSubjectsSemesterScore := CalcGeneralSubjectsSemesterScore(dto, graduationType)
 
 	// 일반 교과 성적 환산값 (총점: 180점)

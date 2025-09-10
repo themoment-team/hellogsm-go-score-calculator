@@ -2,7 +2,7 @@ package validator
 
 import (
 	"fmt"
-	"hellogsm-go-score-calculator/internal/types"
+	"go-hellogsm-score-calculator/internal/types"
 )
 
 func ValidateRequest(dto types.MiddleSchoolAchievementReqDto) error {

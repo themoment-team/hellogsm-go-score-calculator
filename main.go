@@ -8,10 +8,10 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	
-	"hellogsm-go-score-calculator/internal/types"
-	"hellogsm-go-score-calculator/internal/calculator"
-	"hellogsm-go-score-calculator/internal/validator"
+
+	"go-hellogsm-score-calculator/internal/calculator"
+	"go-hellogsm-score-calculator/internal/types"
+	"go-hellogsm-score-calculator/internal/validator"
 )
 
 func createErrorResponse(statusCode int, errorCode, message string) events.APIGatewayProxyResponse {
@@ -20,9 +20,9 @@ func createErrorResponse(statusCode int, errorCode, message string) events.APIGa
 		Message: message,
 		Code:    errorCode,
 	}
-	
+
 	body, _ := json.Marshal(errorResp)
-	
+
 	return events.APIGatewayProxyResponse{
 		StatusCode: statusCode,
 		Headers: map[string]string{
@@ -35,12 +35,12 @@ func createErrorResponse(statusCode int, errorCode, message string) events.APIGa
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	// 디버깅을 위한 로그 추가
 	log.Printf("Received request body: %s", request.Body)
-	
+
 	// 빈 body 체크
 	if request.Body == "" {
 		return createErrorResponse(400, "EMPTY_BODY", "Request body is empty"), nil
 	}
-	
+
 	var reqDto types.MiddleSchoolAchievementReqDto
 	if err := json.Unmarshal([]byte(request.Body), &reqDto); err != nil {
 		log.Printf("JSON unmarshal error: %v", err)
@@ -55,7 +55,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 
 	graduationType := types.GraduationType(reqDto.GraduationType)
 	log.Printf("Processing with graduationType: %s", graduationType)
-	
+
 	calcDto := calculator.BuildCalcDtoWithFillEmpty(reqDto, graduationType)
 	result := calculator.Execute(calcDto, graduationType)
 

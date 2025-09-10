@@ -1,8 +1,8 @@
 package calculator
 
 import (
+	"go-hellogsm-score-calculator/internal/types"
 	"math/big"
-	"hellogsm-go-score-calculator/internal/types"
 )
 
 // GED 검정고시 계산 함수들
@@ -45,12 +45,12 @@ func CalcGedTotalSubjectsScore(averageScore *big.Rat) *big.Rat {
 	temp.Quo(temp, big.NewRat(50, 1))
 	result := new(big.Rat).Mul(temp, big.NewRat(240, 1))
 	result = RoundToThreeDecimals(result)
-	
+
 	// 0보다 작으면 0을 반환
 	if result.Cmp(big.NewRat(0, 1)) < 0 {
 		return big.NewRat(0, 1)
 	}
-	
+
 	return result
 }
 
@@ -60,11 +60,11 @@ func CalcGedVolunteerScore(averageScore *big.Rat) *big.Rat {
 	temp.Quo(temp, big.NewRat(60, 1))
 	result := new(big.Rat).Mul(temp, big.NewRat(30, 1))
 	result = RoundToThreeDecimals(result)
-	
+
 	// 0보다 작으면 0을 반환
 	if result.Cmp(big.NewRat(0, 1)) < 0 {
 		return big.NewRat(0, 1)
 	}
-	
+
 	return result
 }

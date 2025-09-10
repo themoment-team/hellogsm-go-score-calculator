@@ -1,7 +1,7 @@
 package calculator
 
 import (
-	"hellogsm-go-score-calculator/internal/types"
+	"go-hellogsm-score-calculator/internal/types"
 	"math/big"
 )
 
