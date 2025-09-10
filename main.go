@@ -35,6 +35,9 @@ func authorizeCheckForPrivateAPI(headers map[string]string) error {
 	if apiKey == "" {
 		apiKey = headers["X-HG-API-KEY"]
 	}
+	if apiKey == "" {
+		apiKey = headers["x-hg-api-key"]
+	}
 
 	if apiKey != xHellogsmInternalAPIKey {
 		return errors.New("허가되지 않은 클라이언트 요청")
