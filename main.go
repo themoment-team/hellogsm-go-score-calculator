@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -13,6 +15,32 @@ import (
 	"go-hellogsm-score-calculator/internal/types"
 	"go-hellogsm-score-calculator/internal/validator"
 )
+
+const xHGAPIKeyHeader = "x-hg-api-key"
+
+var xHellogsmInternalAPIKey string
+
+func init() {
+	xHellogsmInternalAPIKey = os.Getenv("X_HG_INTERNAL_API_KEY")
+	if xHellogsmInternalAPIKey == "" {
+		log.Fatal("X_HG_INTERNAL_API_KEY 환경변수가 설정되지 않았습니다")
+	}
+}
+
+func authorizeCheckForPrivateAPI(headers map[string]string) error {
+	apiKey := headers[xHGAPIKeyHeader]
+	if apiKey == "" {
+		apiKey = headers["X-Hg-Api-Key"]
+	}
+	if apiKey == "" {
+		apiKey = headers["X-HG-API-KEY"]
+	}
+
+	if apiKey != xHellogsmInternalAPIKey {
+		return errors.New("허가되지 않은 클라이언트 요청")
+	}
+	return nil
+}
 
 func createErrorResponse(statusCode int, errorCode, message string) events.APIGatewayProxyResponse {
 	errorResp := types.ErrorResponse{
@@ -33,7 +61,12 @@ func createErrorResponse(statusCode int, errorCode, message string) events.APIGa
 }
 
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	// 디버깅을 위한 로그 추가
+	// API KEY 인증 확인
+	if err := authorizeCheckForPrivateAPI(request.Headers); err != nil {
+		log.Printf("Authorization failed: %v", err)
+		return createErrorResponse(401, "UNAUTHORIZED", err.Error()), nil
+	}
+
 	log.Printf("Received request body: %s", request.Body)
 
 	// 빈 body 체크
