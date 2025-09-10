@@ -57,10 +57,10 @@ GSM(광주소프트웨어마이스터고) 입학 전형의 내신 성적 계산�
   "achievement3_1": [5, 5, 4, 5, 5],
   "achievement3_2": [5, 5, 5, 5, 5],
   "artsPhysicalAchievement": [4, 4, 5, 3, 4, 4],
-  "absentDays": [2, 1, 0, 3, 1, 2],
-  "attendanceDays": [190, 195, 200, 185, 198, 192],
+  "absentDays": [2, 1, 0],
+  "attendanceDays": [190, 195, 200, 185, 198, 192, 200, 100, 100],
   "volunteerTime": [25, 30, 35],
-  "liberalSystem": "FIRST",
+  "liberalSystem": "자유학기제",
   "freeSemester": "1-2"
 }
 ```
