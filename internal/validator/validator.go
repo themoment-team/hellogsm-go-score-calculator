@@ -58,7 +58,6 @@ func ValidateRequest(dto types.MiddleSchoolAchievementReqDto) error {
 		}
 	}
 
-	// 필수 배열 필드 검증
 	if dto.ArtsPhysicalAchievement == nil || len(dto.ArtsPhysicalAchievement) == 0 {
 		return fmt.Errorf("artsPhysicalAchievement is required and cannot be empty")
 	}

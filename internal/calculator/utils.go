@@ -20,7 +20,7 @@ func RatToFloat64(rat *big.Rat) float64 {
 	return rounded / 1000.0
 }
 
-// 소수점 3자리에서 반올림하는 함수 (Java의 HALF_UP과 동일)
+// 소수점 3자리에서 반올림하는 함수
 func RoundToThreeDecimals(value *big.Rat) *big.Rat {
 	result := new(big.Rat)
 	multiplier := big.NewRat(1000, 1)

@@ -1,8 +1,8 @@
 package calculator
 
 import (
-	"math/big"
 	"hellogsm-go-score-calculator/internal/types"
+	"math/big"
 )
 
 func BuildCalcDtoWithFillEmpty(dto types.MiddleSchoolAchievementReqDto, graduationType types.GraduationType) types.MiddleSchoolAchievementCalcDto {
@@ -16,7 +16,7 @@ func BuildCalcDtoWithFillEmpty(dto types.MiddleSchoolAchievementReqDto, graduati
 			GedAvgScore: gedAvgScore,
 		}
 	}
-	
+
 	// 졸업예정자 & 졸업자는 없는 성적을 복사하여 사용
 	// 자유학년제(1학년)을 제외하고, 두개 이상의 빈학기가 없다는 가정
 	tmpAchievement1_1 := dto.Achievement1_1
@@ -87,7 +87,6 @@ func CalcGeneralSubjectsSemesterScore(dto types.MiddleSchoolAchievementCalcDto, 
 }
 
 func CalcGeneralSubjectsTotalScore(generalSubjectsSemesterScore types.GeneralSubjectsSemesterScoreCalcDto) *big.Rat {
-	// Stream.of()와 동일한 방식으로 처리
 	scores := []*big.Rat{
 		generalSubjectsSemesterScore.Score1_2,
 		generalSubjectsSemesterScore.Score2_1,
@@ -121,7 +120,7 @@ func CalcGeneralSubjectsScore(achievements []int, maxPoint *big.Rat) *big.Rat {
 			noZeroAchievements = append(noZeroAchievements, achievement)
 		}
 	}
-	
+
 	// 위에서 구한 리스트가 비어있다면 0.000을 반환
 	if len(noZeroAchievements) == 0 {
 		return RoundToThreeDecimals(big.NewRat(0, 1))
@@ -129,11 +128,11 @@ func CalcGeneralSubjectsScore(achievements []int, maxPoint *big.Rat) *big.Rat {
 
 	// 1. 점수로 환산된 등급을 모두 더한다.
 	totalSumRat := big.NewRat(int64(totalSum), 1)
-	
+
 	// 2. 더한값 / (과목 수 * 5) (소수점 6째자리에서 반올림)
 	divisor := big.NewRat(int64(len(noZeroAchievements)*5), 1)
 	divideResult := new(big.Rat).Quo(totalSumRat, divisor)
-	
+
 	// 3. 각 학기당 배점 * 나눈값 (소수점 4째자리에서 반올림)
 	result := new(big.Rat).Mul(divideResult, maxPoint)
 
@@ -191,7 +190,7 @@ func CalcAttendanceScore(absentDays, attendanceDays []int) *big.Rat {
 
 	// 2. 지각, 조퇴, 결과 횟수는 3개당 결석 1회
 	absentResult := totalAttendanceDays / 3
-	
+
 	// 3. 총점(30점) - (3 * 총 결석 횟수)
 	totalAbsent := totalAbsentDays + absentResult
 	result := 30 - (3 * totalAbsent)
@@ -212,16 +211,16 @@ func CalcVolunteerScore(volunteerHours []int) *big.Rat {
 		// 연간 7시간 이상
 		if hour >= 7 {
 			score = 10
-		// 연간 6시간 이상
+			// 연간 6시간 이상
 		} else if hour >= 6 {
 			score = 8
-		// 연간 5시간 이상
+			// 연간 5시간 이상
 		} else if hour >= 5 {
 			score = 6
-		// 연간 4시간 이상
+			// 연간 4시간 이상
 		} else if hour >= 4 {
 			score = 4
-		// 연간 3시간 이하
+			// 연간 3시간 이하
 		} else {
 			score = 2
 		}

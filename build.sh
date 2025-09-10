@@ -3,10 +3,8 @@ set -e
 
 echo "Building hellogsm-go-score-calculator Lambda function..."
 
-# Go 의존성 정리
 go mod tidy
 
-# Linux용 바이너리 빌드
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bootstrap main.go
 
 if [ $? -eq 0 ]; then
