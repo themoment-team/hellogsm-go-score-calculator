@@ -40,7 +40,7 @@ func ValidateRequest(dto types.MiddleSchoolAchievementReqDto) error {
 	}
 
 	// 자유학기제인 경우 freeSemester 검증
-	if dto.LiberalSystem == "자유학기제" && dto.FreeSemester == "" {
+	if dto.LiberalSystem == "자유학기제" && graduationType != types.GRADUATE && dto.FreeSemester == "" {
 		return fmt.Errorf("freeSemester is required when liberalSystem is '자유학기제'")
 	}
 
